@@ -116,7 +116,8 @@ public:
 	// "Fast" version
 	forceinline int p(int shift,
 		int p0 = 0, int p1 = 0, int p2 = 0, int p3 = 0, int p4 = 0,
-		int p5 = 0, int p6 = 0, int p7 = 0, int p8 = 0, int p9 = 0) const {
+		int p5 = 0, int p6 = 0, int p7 = 0, int p8 = 0, int p9 = 0,
+		int p10 = 0, int p11 = 0) const {
 		int ptotal = 0;
 		if (weights > 0) ptotal += p0 * static_cast<int>(w[0]);
 		if (weights > 1) ptotal += p1 * static_cast<int>(w[1]);
@@ -128,6 +129,8 @@ public:
 		if (weights > 7) ptotal += p7 * static_cast<int>(w[7]);
 		if (weights > 8) ptotal += p8 * static_cast<int>(w[8]);
 		if (weights > 9) ptotal += p9 * static_cast<int>(w[9]);
+		if (weights > 10) ptotal += p10 * static_cast<int>(w[10]);
+		if (weights > 11) ptotal += p11 * static_cast<int>(w[11]);
 		ptotal += w[weights] << shift;
 		return ptotal >> fp_shift;
 	}

@@ -369,3 +369,4 @@ template class CM<kCMTypeFast>;
 template class CM<kCMTypeMid>;
 template class CM<kCMTypeHigh>;
 template class CM<kCMTypeMax>;
+template class CM<kCMTypeUlt>;

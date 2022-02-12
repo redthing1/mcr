@@ -47,6 +47,7 @@ enum CompLevel {
 	kCompLevelMid,
 	kCompLevelHigh,
 	kCompLevelMax,
+	kCompLevelUlt,
 };
 std::ostream& operator<<(std::ostream& os, CompLevel comp_level);
 

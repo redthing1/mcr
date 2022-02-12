@@ -95,6 +95,7 @@ enum CMType {
 	kCMTypeMid,
 	kCMTypeHigh,
 	kCMTypeMax,
+	kCMTypeUlt,
 };
 
 enum CMProfile {
@@ -114,6 +115,7 @@ public:
 		kCMType == kCMTypeMid ? 6 : 
 		kCMType == kCMTypeHigh ? 8 : 
 		kCMType == kCMTypeMax ? 10 :
+		kCMType == kCMTypeUlt ? 12 :
 		0;
 	
 	// Flags
@@ -428,10 +430,10 @@ public:
 		uint8_t 
 			*no_alias sp0 = nullptr, *no_alias sp1 = nullptr, *no_alias sp2 = nullptr, *no_alias sp3 = nullptr, *no_alias sp4 = nullptr,
 			*no_alias sp5 = nullptr, *no_alias sp6 = nullptr, *no_alias sp7 = nullptr, *no_alias sp8 = nullptr, *no_alias sp9 = nullptr;
-		uint8_t s0 = 0, s1 = 0, s2 = 0, s3 = 0, s4 = 0, s5 = 0, s6 = 0, s7 = 0, s8 = 0, s9 = 0;
+		uint8_t s0 = 0, s1 = 0, s2 = 0, s3 = 0, s4 = 0, s5 = 0, s6 = 0, s7 = 0, s8 = 0, s9 = 0, s10 = 0, s11 = 0;
 
 		uint32_t p;
-		int p0 = 0, p1 = 0, p2 = 0, p3 = 0, p4 = 0, p5 = 0, p6 = 0, p7 = 0, p8 = 0, p9 = 0;
+		int p0 = 0, p1 = 0, p2 = 0, p3 = 0, p4 = 0, p5 = 0, p6 = 0, p7 = 0, p8 = 0, p9 = 0, p10 = 0, p11 = 0;
 		if (kBitType == kBitTypeLZP) {
 			if (inputs > 0) {
 				if (kFixedMatchProbs) {
@@ -505,8 +507,18 @@ public:
 			s9 = *sp9;
 			p9 = getP(s9, 9);
 		}
+		if (inputs > 10) {
+			sp10 = &hash_table[base_contexts[10] ^ ctx];
+			s10 = *sp10;
+			p10 = getP(s10, 10);
+		}
+		if (inputs > 11) {
+			sp11 = &hash_table[base_contexts[11] ^ ctx];
+			s11 = *sp11;
+			p11 = getP(s11, 11);
+		}
 		auto* const cur_mixer = &mixer_base[mixer_ctx];
-		int stp = cur_mixer->p(9, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9);
+		int stp = cur_mixer->p(11, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11);
 		if (stp < kMinST) stp = kMinST;
 		if (stp >= kMaxST) stp = kMaxST - 1;
 		int mixer_p = table.squnsafe(stp); // Mix probabilities.
@@ -538,7 +550,7 @@ public:
 		dcheck(bit < 2);
 
 		// Returns false if we skipped the update due to a low error, should happen moderately frequently on highly compressible files.
-		const bool ret = cur_mixer->update(mixer_p, bit, kShift, 28, 1, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9);
+		const bool ret = cur_mixer->update(mixer_p, bit, kShift, 28, 1, p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11);
 		// Only update the states / predictions if the mixer was far enough from the bounds, helps 15k on enwik8 and 1-2sec.
 		if (ret) {
 			if (kBitType == kBitTypeLZP) {
@@ -560,6 +572,8 @@ public:
 			if (inputs > 7) *sp7 = nextState(s7, bit, 7);
 			if (inputs > 8) *sp8 = nextState(s8, bit, 8);
 			if (inputs > 9) *sp9 = nextState(s9, bit, 9);
+			if (inputs > 10) *sp10 = nextState(s10, bit, 10);
+			if (inputs > 11) *sp11 = nextState(s11, bit, 11);
 		}
 		if (kUseSSE) {
 			if (kUseLZP) {
@@ -903,7 +917,7 @@ public:
 #endif
 			// if (inputs > idx++) enableModel(static_cast<Model>(opt_var));
 			current_mask_map_ = text_mask_map_;
-			min_match_lzp_ = lzp_enabled_ ? 9 : kMaxMatch;
+			min_match_lzp_ = lzp_enabled_ ? 11 : kMaxMatch;
 			miss_fast_path_ = 1000000;
 			break;
 		default: // Binary

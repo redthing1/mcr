@@ -100,8 +100,8 @@ public:
 			<< "Caution: Experimental, use only for testing!" << std::endl
 			<< "Usage: " << name << " [command] [options] <infile> <outfile>" << std::endl
 			<< "Options: d for decompress" << std::endl
-			<< "-{t|f|m|h|x}{1 .. 11} compression option" << std::endl
-			<< "t is turbo, f is fast, m is mid, h is high, x is max (default " << CompressionOptions::kDefaultLevel << ")" << std::endl
+			<< "-{t|f|m|h|x|u}{1 .. 12} compression option" << std::endl
+			<< "t is turbo, f is fast, m is mid, h is high, x is max, u is ultima (default " << CompressionOptions::kDefaultLevel << ")" << std::endl
 			<< "0 .. 11 specifies memory with 32mb .. 5gb per thread (default " << CompressionOptions::kDefaultMemUsage << ")" << std::endl
 			<< "10 and 11 are only supported on 64 bits" << std::endl
 			<< "-test tests the file after compression is done" << std::endl
@@ -178,6 +178,7 @@ public:
 				else if (arg[1] == 'm') options_.comp_level_ = kCompLevelMid;
 				else if (arg[1] == 'h') options_.comp_level_ = kCompLevelHigh;
 				else if (arg[1] == 'x') options_.comp_level_ = kCompLevelMax;
+				else if (arg[1] == 'u') options_.comp_level_ = kCompLevelUlt;
 				else {
 					std::cerr << "Unknown option " << arg << std::endl;
 					return 4;
@@ -194,12 +195,13 @@ public:
 				else if (mem_string == "7") options_.mem_usage_ = 7;
 				else if (mem_string == "8") options_.mem_usage_ = 8;
 				else if (mem_string == "9") options_.mem_usage_ = 9;
-				else if (mem_string == "10" || mem_string == "11") {
+				else if (mem_string == "10" || mem_string == "11" || mem_string == "12") {
 					if (sizeof(void*) < 8) {
 						std::cerr << arg << " only supported with 64 bit" << std::endl;
 						return usage(program);
 					}
 					if (mem_string == "10") options_.mem_usage_ = 10;
+					if (mem_string == "12") options_.mem_usage_ = 12;
 					else options_.mem_usage_ = 11;
 				}
 				else if (!mem_string.empty()) {

@@ -99,6 +99,7 @@ public:
 		kTypeCMMid,
 		kTypeCMHigh,
 		kTypeCMMax,
+		kTypeCMUlt,
 	};
 
 	class Factory {

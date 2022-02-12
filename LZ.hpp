@@ -190,7 +190,7 @@ private:
 		return o0 ^ 256;
 	}
 	forceinline byte nextState(uint8_t state, uint32_t bit, uint32_t ctx) {
-		probs_[ctx][state].update(bit, 9);
+		probs_[ctx][state].update(bit, 11);
 		return state_trans_[state][bit];
 	}
 	
@@ -204,7 +204,7 @@ private:
 		auto s1 = ctx2[o0];
 		int p1 = getP(s1, 1);
 		auto* const cur_mixer = &mixers_[o0];
-		int stp = cur_mixer->p(9, p0, p1);
+		int stp = cur_mixer->p(11, p0, p1);
 		int p = table_.sq(stp); // Mix probabilities.
 		if (decode) { 
 			bit = ent_.getDecodedBit(p, kShift);

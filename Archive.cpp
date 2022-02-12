@@ -84,6 +84,8 @@ Archive::Algorithm::Algorithm(const CompressionOptions& options, Detector::Profi
 			break;
 		case kCompLevelMax:
 			algorithm_ = Compressor::kTypeCMMax;
+		case kCompLevelUlt:
+			algorithm_ = Compressor::kTypeCMUlt;
 			break;
 		}
 	}
@@ -141,6 +143,8 @@ Compressor* Archive::Algorithm::createCompressor() {
 		return new CM<kCMTypeHigh>(mem_usage_, lzp_enabled_, profile_);
 	case Compressor::kTypeCMMax:
 		return new CM<kCMTypeMax>(mem_usage_, lzp_enabled_, profile_);
+	case Compressor::kTypeCMUlt:
+		return new CM<kCMTypeUlt>(mem_usage_, lzp_enabled_, profile_);
 	}
 	return nullptr;
 }
@@ -169,6 +173,7 @@ std::ostream& operator<<(std::ostream& os, CompLevel comp_level) {
 	case kCompLevelMid: return os << "mid";
 	case kCompLevelHigh: return os << "high";
 	case kCompLevelMax: return os << "max";
+	case kCompLevelUlt: return os << "ultima";
 	}
 	return os << "unknown";
 }
