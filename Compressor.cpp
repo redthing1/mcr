@@ -64,9 +64,11 @@ void BitStreamCompressor::decompressBytes(byte* in, byte* out, size_t count) {
 }
 
 void Store::compress(Stream* in, Stream* out, uint64_t count) {
+	std::cout << "got here: cheese1" << std::endl;
 	static const uint64_t kBufferSize = 8 * KB;
 	byte buffer[kBufferSize];
 	while (count > 0) {
+		std::cout << "got here: cheese2" << std::endl;
 		const size_t read = in->read(buffer, std::min(count, kBufferSize));
 		if (read == 0) {
 			break;

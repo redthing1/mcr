@@ -127,6 +127,7 @@ public:
 	}
 
 	virtual void compress(Stream* in_stream, Stream* out_stream, uint64_t max_count) {
+		std::cout << "got here: cheese5" << std::endl;
 		BufferedStreamReader<4 * KB> sin(in_stream);
 		BufferedStreamWriter<4 * KB> sout(out_stream);
 		assert(in_stream != nullptr);

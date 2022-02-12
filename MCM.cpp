@@ -243,16 +243,16 @@ public:
 			} else if (mode == kModeCompress || mode == kModeSingleTest || mode == kModeOpt) {
 				archive_file = FilePath(out_file);
 				files.push_back(FilePath(in_file));
-			} else {
+			} else { // decompress mode
 				archive_file = FilePath(in_file);
 				files.push_back(FilePath(out_file));
 			}
 		}
-		if (archive_file.isEmpty() || files.empty()) {
-			std::cerr << "Error, input or output files missing" << std::endl;
-			usage(program);
-			return 5;
-		}
+		// if (archive_file.isEmpty() || files.empty()) {
+		// 	std::cerr << "Error, input or output files missing" << std::endl;
+		// 	usage(program);
+		// 	return 5;
+		// }
 		return 0;
 	}
 };
@@ -379,12 +379,17 @@ int main(int argc, char* argv[]) {
 		auto in_file = options.files.back().getName();
 		auto out_file = options.archive_file.getName();
 
-		if (err = fin.open(in_file, std::ios_base::in | std::ios_base::binary)) {
-			std::cerr << "Error opening: " << in_file << " (" << errstr(err) << ")" << std::endl;
+		// if (err = fin.open(in_file, std::ios_base::in | std::ios_base::binary)) {
+		// 	std::cerr << "Error opening: " << in_file << " (" << errstr(err) << ")" << std::endl;
+		// 	return 1;
+		// }
+		if (err = fin.open_stdin()) {
+			std::cerr << "Error opening: stdin (" << errstr(err) << ")" << std::endl;
 			return 1;
 		}
 
 		if (options.mode == Options::kModeOpt) {
+			// optimizer mode
 			std::cout << "Optimizing " << in_file << std::endl;
 			uint64_t best_size = std::numeric_limits<uint64_t>::max();
 			size_t best_var = 0;
@@ -408,20 +413,26 @@ int main(int argc, char* argv[]) {
 					<< clockToSeconds(time) << "s" << std::endl;
 			}
 		} else {
+			// non-optimizer mode
 			const clock_t start = clock();
-			if (err = fout.open(out_file, std::ios_base::out | std::ios_base::binary)) {
-				std::cerr << "Error opening: " << out_file << " (" << errstr(err) << ")" << std::endl;
+			// if (err = fout.open(out_file, std::ios_base::out | std::ios_base::binary)) {
+			// 	std::cerr << "Error opening: " << out_file << " (" << errstr(err) << ")" << std::endl;
+			// 	return 2;
+			// }
+			if (err = fout.open_stdout()) {
+				std::cerr << "Error opening: stdout (" << errstr(err) << ")" << std::endl;
 				return 2;
 			}
 
-			std::cout << "Compressing to " << out_file << " mode=" << options.options_.comp_level_ << " mem=" << options.options_.mem_usage_ << std::endl;
+			// std::cout << "Compressing to " << out_file << " mode=" << options.options_.comp_level_ << " mem=" << options.options_.mem_usage_ << std::endl;
+			std::cout << "Compressing to stdout mode=" << options.options_.comp_level_ << " mem=" << options.options_.mem_usage_ << std::endl;
 
 			{
 				Archive archive(&fout, options.options_);
 				archive.compress(&fin);
 			}
 			clock_t time = clock() - start;
-			fin.seek(0, SEEK_END);
+			// fin.seek(0, SEEK_END);
 			const uint64_t file_size = fin.tell();
 			std::cout << "Compressed " << formatNumber(fin.tell()) << "->" << formatNumber(fout.tell())
 				<< " in " << std::setprecision(3) << clockToSeconds(time) << "s"

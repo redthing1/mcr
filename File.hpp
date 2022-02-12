@@ -156,6 +156,18 @@ public:
 		return errno;
 	}
 
+	int open_stdin() {
+		handle = stdin;
+		offset = 0;
+		return 0;
+	}
+
+	int open_stdout() {
+		handle = stdout;
+		offset = 0;
+		return 0;
+	}
+
 	// Not thread safe.
 	size_t read(uint8_t* buffer, size_t bytes) {
 		size_t ret = fread(buffer, 1, bytes, handle);

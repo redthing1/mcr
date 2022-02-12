@@ -390,16 +390,19 @@ void Archive::compress(Stream* in) {
 		std::unique_ptr<Compressor> comp(algo->createCompressor());
 		comp->setOpt(opt_var_);
 		{
+			std::cout << "got here: after create compressor" << std::endl;
 			ProgressThread thr(&segstream, stream_, true, out_start);
+			std::cout << "got here: cheese0" << std::endl;
 			comp->compress(in_stream, stream_);
+			std::cout << "got here: after compress" << std::endl;
 		}
 		auto after_pos = stream_->tell();
 
-		// Fix up the size.
-		stream_->seek(out_start);
-		const auto filter_size = in_stream->tell() - in_start;
-		stream_->leb128Encode(filter_size);
-		stream_->seek(after_pos);
+		// // Fix up the size.
+		// stream_->seek(out_start);
+		// const auto filter_size = in_stream->tell() - in_start;
+		// stream_->leb128Encode(filter_size);
+		// stream_->seek(after_pos);
 
 		// Dump some info.
 		std::cout << std::endl;

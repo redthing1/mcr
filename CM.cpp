@@ -165,8 +165,10 @@ void CM<kCMType>::init() {
 
 template <CMType kCMType>
 void CM<kCMType>::compress(Stream* in_stream, Stream* out_stream, uint64_t max_count) {
+	std::cout << "got here: cheese5" << std::endl;
 	BufferedStreamWriter<4 * KB> sout(out_stream);
 	BufferedStreamReader<4 * KB> sin(in_stream);
+	std::cout << "got here: cheese50" << std::endl;
 	assert(in_stream != nullptr);
 	assert(out_stream != nullptr);
 	Detector detector(in_stream);
@@ -174,6 +176,7 @@ void CM<kCMType>::compress(Stream* in_stream, Stream* out_stream, uint64_t max_c
 		detector.setOptVar(opt_var);
 		detector.init();
 	}
+	std::cout << "got here: cheese51" << std::endl;
 	init();
 	ent.init();
 	if (use_huffman) {
@@ -193,6 +196,7 @@ void CM<kCMType>::compress(Stream* in_stream, Stream* out_stream, uint64_t max_c
 		huff.build(tree);	
 		std::cout << "Building huffman tree took: " << clock() - start << " MS" << std::endl;
 	}
+	std::cout << "got here: cheese52" << std::endl;
 	for (;max_count > 0; --max_count) {
 		uint32_t c;
 		if (!force_profile_) {
@@ -204,15 +208,20 @@ void CM<kCMType>::compress(Stream* in_stream, Stream* out_stream, uint64_t max_c
 				setDataProfile(cm_profile);
 			}
 		} else {
+			std::cout << "got here: cheese5C" << std::endl;
+			std::cout << "got here: ccval: " << sin.tell() << std::endl;
 			c = sin.get();
-			if (c == EOF) break;
+			if (c == EOF) {break;
+			std::cout << "got here: cheeseBrek5" << std::endl;
+			}
 		}
+		std::cout << "got here: cheese99" << std::endl;
 		dcheck(c != EOF);
 		processByte<false>(sout, c);
 		update(c);
 	}
 	ent.flush(sout);
-
+	std::cout << "got here: cheese70" << std::endl;
 	// TODO: Put in statistics??
 	uint64_t total = 0;
 	if (use_huffman) {
