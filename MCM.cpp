@@ -47,7 +47,7 @@ CompressorFactories* CompressorFactories::instance = nullptr;
 static void printHeader() {
 	std::cout
 		<< "======================================================================" << std::endl
-		<< "mcm compressor v" << Archive::Header::kCurMajorVersion << "." << Archive::Header::kCurMinorVersion
+		<< "mcm compressor (rt1 variant) v" << Archive::Header::kCurMajorVersion << "." << Archive::Header::kCurMinorVersion
 			<< ", by Mathieu Chartier (c)2015 Google Inc." << std::endl
 		<< "Experimental, may contain bugs. Contact mathieu.a.chartier@gmail.com" << std::endl
 		<< "Special thanks to: Matt Mahoney, Stephan Busch, Christopher Mattern." << std::endl
