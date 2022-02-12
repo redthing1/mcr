@@ -46,7 +46,7 @@ size_t LZ16<MatchFinder>::compress(uint8_t* in, uint8_t* out, size_t count) {
   const uint8_t* in_ptr = in;
   uint8_t* out_ptr = out;
   // uint8_t* buffer, size_t buffer_size, size_t min_match, size_t max_match
-  MatchFinder mf(0xFFFFF, 0xFFFF + kMinMatch, in, count, kMinMatch, kMaxMatch);
+  MatchFinder mf(0xFFFFF, 0xFFFF + kMinMatch, in, count, kMinMatch, LZ16_kMaxMatch);
   // Stats
   size_t short_offsets = 0, long_offsets = 0, len_bytes = 0, skip_bytes = 0, offset_bytes = 0;
   size_t non_match_lens[kMaxNonMatch + 1] = {}, match_lens[kMatchLens + 1] = {};
@@ -82,7 +82,7 @@ size_t LZ16<MatchFinder>::compress(uint8_t* in, uint8_t* out, size_t count) {
         ++match_lens[std::min(len, kMatchLens)];
       }
       do {
-        auto cur_len = std::min(kMaxMatch, len);
+        auto cur_len = std::min(LZ16_kMaxMatch, len);
         out_ptr = WriteMatch(out_ptr, in_ptr, nm_len, cur_len, pos);
         in_ptr += nm_len + cur_len;
         non_match_len -= nm_len;

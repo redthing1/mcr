@@ -64,10 +64,13 @@ public:
 
 class Dict {
 public:
-  static const size_t kMinWordLen = 3;
+  // static const size_t kMinWordLen = 3;
   static const size_t kMaxWordLen = 256;
+  static const size_t kMinWordLen;
+  // static const size_t kMaxWordLen;
   static const size_t kInvalidChar = 256;
   static const bool kOverlapCodewords = true;
+
   typedef std::pair<uint32_t, std::string> WCPair;
 
   struct ReverseCompareString {

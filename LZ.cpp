@@ -105,6 +105,9 @@ size_t MemoryLZ::getMatchLen(byte* m1, byte* m2, byte* limit1) {
 }
 #endif
 
+const uint32_t VRolz::kMinMatch = 2U;
+const uint32_t VRolz::kMaxMatch = 0xFU + VRolz::kMinMatch;
+
 size_t VRolz::getMaxExpansion(size_t in_size) {
   return in_size * 4 / 3;
 }
@@ -311,3 +314,9 @@ void CMRolz::decompress(Stream* in_stream, Stream* out_stream) {
     out_stream->put(c);
   }
 }
+
+// template<>
+// const size_t LZ16<class MatchFinder>::kMaxMatch;
+
+// template<>
+// constexpr size_t LZ16<FastMatchFinder<MemoryMatchFinder>>::kMaxMatch = 15;

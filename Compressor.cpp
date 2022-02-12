@@ -98,6 +98,7 @@ void Store::decompress(Stream* in, Stream* out, uint64_t count) {
   }
 }
 
+const size_t MemoryCompressor::kBufferSize = 32 * MB;
 void MemoryCompressor::compress(Stream* in, Stream* out, uint64_t max_count) {
   std::unique_ptr<uint8_t[]> in_buffer(new uint8_t[kBufferSize]);
   std::unique_ptr<uint8_t[]> out_buffer(new uint8_t[getMaxExpansion(kBufferSize)]);

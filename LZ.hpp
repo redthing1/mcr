@@ -216,8 +216,10 @@ public:
 
 // variable order rolz.
 class VRolz {
-  static const uint32_t kMinMatch = 2U;
-  static const uint32_t kMaxMatch = 0xFU + kMinMatch;
+  // static const uint32_t kMinMatch = 2U;
+  // static const uint32_t kMaxMatch = 0xFU + kMinMatch;
+  static const uint32_t kMinMatch;
+  static const uint32_t kMaxMatch;
 public:
   template<uint32_t kSize>
   class RolzTable {
@@ -394,11 +396,13 @@ public:
   virtual void decompress(uint8_t* in, uint8_t* out, size_t count);
 };
 
+static constexpr size_t LZ16_kMaxMatch = 15;
 // Very fast lz that always copies 16 bytes.
 template <class MatchFinder>
 class LZ16 : public MemoryCompressor {
   static constexpr size_t kMinMatch = 5;
-  static constexpr size_t kMaxMatch = 15;
+  // static constexpr size_t kMaxMatch = 15;
+  // static constexpr size_t kMaxMatch;
   static constexpr size_t kMaxNonMatch = 15;
 public:
   virtual size_t getMaxExpansion(size_t in_size) {

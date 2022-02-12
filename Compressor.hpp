@@ -139,7 +139,7 @@ public:
 
 // In memory compressor.
 class MemoryCompressor : public Compressor {
-  static const size_t kBufferSize = 32 * MB;
+  static const size_t kBufferSize;
 public:
   virtual size_t getMaxExpansion(size_t s) = 0;
   virtual size_t compress(uint8_t* in, uint8_t* out, size_t count) = 0;

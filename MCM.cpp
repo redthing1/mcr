@@ -583,3 +583,11 @@ int main(int argc, char* argv[]) {
   }
   return 0;
 }
+
+const size_t Dict::kMinWordLen = 3;
+// const size_t Dict::kMaxWordLen = 256;
+// const size_t Dict::kInvalidChar = 256;
+// const bool Dict::kOverlapCodewords = true;
+
+// constexpr uint32_t WordCounter::kInvalidPos = 0xFFFFFFFF;
+const uint32_t WordCounter::kInvalidPos;

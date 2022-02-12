@@ -385,6 +385,7 @@ private:
   size_t hash_mask_;
   uint32_t pos_mask_;
   static constexpr uint32_t kInvalidPos = 0xFFFFFFFF;
+  // static constexpr uint32_t kInvalidPos = 0xFFFFFFFF;
 };
 
 #endif
