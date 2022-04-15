@@ -47,7 +47,7 @@ CompressorFactories* CompressorFactories::instance = nullptr;
 static void printHeader() {
 	std::cout
 		<< "======================================================================" << std::endl
-		<< "mcr (mcm + r) v" << Archive::Header::kCurMajorVersion << "." << Archive::Header::kCurMinorVersion << std::endl
+		<< "mcr (mcm + r) v" << Archive::Header::kCurMajorVersion << "." << Archive::Header::kCurMinorVersion << "." << Archive::Header::kCurPatchVersion  << std::endl
 		<< "Credits: M. Chartier, M. Mahoney, S. Busch, C. Mattern." << std::endl
 		<< "======================================================================" << std::endl;
 }
