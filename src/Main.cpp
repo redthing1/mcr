@@ -47,9 +47,8 @@ CompressorFactories* CompressorFactories::instance = nullptr;
 static void printHeader() {
 	std::cout
 		<< "======================================================================" << std::endl
-		<< "mcm compressor [rt1] v" << Archive::Header::kCurMajorVersion << "." << Archive::Header::kCurMinorVersion
-			<< ", by Mathieu Chartier (c) 2015 Google Inc." << std::endl
-		<< "Special thanks to: Matt Mahoney, Stephan Busch, Christopher Mattern." << std::endl
+		<< "mcr (mcm + r) v" << Archive::Header::kCurMajorVersion << "." << Archive::Header::kCurMinorVersion << std::endl
+		<< "Credits: M. Chartier, M. Mahoney, S. Busch, C. Mattern." << std::endl
 		<< "======================================================================" << std::endl;
 }
 
@@ -96,7 +95,6 @@ public:
 	int usage(const std::string& name) {
 		printHeader();
 		std::cout
-			<< "Caution: Experimental, use only for testing!" << std::endl
 			<< "Usage: " << name << " [command] [options] <infile> <outfile>" << std::endl
 			<< "Options: d for decompress" << std::endl
 			<< "-{t|f|m|h|x}{1 .. 11} compression option" << std::endl

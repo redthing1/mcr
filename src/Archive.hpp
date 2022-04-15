@@ -77,8 +77,8 @@ class Archive {
 public:
 	class Header {
 	public:
-		static const size_t kCurMajorVersion = 0;
-		static const size_t kCurMinorVersion = 83;
+		static const size_t kCurMajorVersion = 1;
+		static const size_t kCurMinorVersion = 0;
 		static const size_t kMagicStringLength = 10;
 		
 		static const char* getMagic() {
