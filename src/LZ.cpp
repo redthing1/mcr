@@ -903,3 +903,9 @@ void CMRolz::decompress(Stream* in_stream, Stream* out_stream) {
 		out_stream->put(c);
 	}
 }
+
+const size_t LZFast::kMaxMatch = 0x7F + kMinMatch;
+const size_t LZFast::kMaxNonMatch = 0x7F + kMinNonMatch;
+
+const uint32_t VRolz::kMinMatch = 2U;
+const uint32_t VRolz::kMaxMatch = 0xFU + VRolz::kMinMatch;

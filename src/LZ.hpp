@@ -230,8 +230,10 @@ public:
 
 // variable order rolz.
 class VRolz {
-	static const uint32_t kMinMatch = 2U;
-	static const uint32_t kMaxMatch = 0xFU + kMinMatch;
+	// static const uint32_t kMinMatch = 2U;
+	// static const uint32_t kMaxMatch = 0xFU + kMinMatch;
+	static const uint32_t kMinMatch;
+	static const uint32_t kMaxMatch;
 public:
 	template<uint32_t kSize>
 	class RolzTable {
@@ -452,8 +454,10 @@ private:
 	// static const uint32_t kMaxMatch = (0xFF ^ kMatchFlag) + kMinMatch;
 	static const size_t kMinNonMatch = 1;
 #if 1
-	static const size_t kMaxMatch = 0x7F + kMinMatch;
-	static const size_t kMaxNonMatch = 0x7F + kMinNonMatch;
+	// static const size_t kMaxMatch = 0x7F + kMinMatch;
+	// static const size_t kMaxNonMatch = 0x7F + kMinNonMatch;
+	static const size_t kMaxMatch;
+	static const size_t kMaxNonMatch;
 #elif 0
 	static const size_t kMaxMatch = 16; // 0xF + kMinMatch;
 	static const size_t kMaxNonMatch = 16;
