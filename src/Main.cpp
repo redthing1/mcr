@@ -96,17 +96,17 @@ public:
 		printHeader();
 		std::cout
 			<< "Usage: " << name << " [command] [options] <infile> <outfile>" << std::endl
-			<< "Options: d for decompress" << std::endl
-			<< "-{t|f|m|h|x}{1 .. 11} compression option" << std::endl
-			<< "t is turbo, f is fast, m is mid, h is high, x is max (default " << CompressionOptions::kDefaultLevel << ")" << std::endl
-			<< "0 .. 11 specifies memory with 32mb .. 5gb per thread (default " << CompressionOptions::kDefaultMemUsage << ")" << std::endl
-			<< "10 and 11 are only supported on 64 bits" << std::endl
-			<< "-test tests the file after compression is done" << std::endl
+			<< "Options: c|d|a|e|x" << std::endl
+			<< "	-{t|f|m|h|x}{1 .. 11} compression option" << std::endl
+			<< "	t is turbo, f is fast, m is mid, h is high, x is max (default " << CompressionOptions::kDefaultLevel << ")" << std::endl
+			<< "	0 .. 11 specifies memory with 32mb .. 5gb per thread (default " << CompressionOptions::kDefaultMemUsage << ")" << std::endl
+			<< "	10 and 11 are only supported on 64 bits" << std::endl
+			<< "	-test tests the file after compression is done" << std::endl
 			// << "-b <mb> specifies block size in MB" << std::endl
 			// << "-t <threads> the number of threads to use (decompression requires the same number of threads" << std::endl
 			<< "Examples:" << std::endl
-			<< "Compress: " << name << " -m9 enwik8 enwik8.mcm" << std::endl
-			<< "Decompress: " << name << " d enwik8.mcm enwik8.ref" << std::endl;
+			<< "	Compress: " << name << " -m9 enwik8 enwik8.mcm" << std::endl
+			<< "	Decompress: " << name << " d enwik8.mcm enwik8.ref" << std::endl;
 		return 0;
 	}
 
@@ -214,6 +214,7 @@ public:
 			}
 		}
 		if (mode == kModeUnknown && has_comp_args) {
+			// we didn't explicitly specify a mode but there are compression level args
 			mode = kModeCompress;
 		}
 		const bool single_file_mode =
