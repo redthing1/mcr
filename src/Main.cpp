@@ -485,8 +485,8 @@ int main(int argc, char* argv[]) {
 			return 1;
 		}
 		if (!header.isSameVersion()) {
-			std::cerr << "Attempting to decompress old version " << header.majorVersion() << "." << header.minorVersion() << std::endl;
-			return 1;
+			std::cerr << "!!!WARNING!!! - Attempting to decompress archive created by old version " << header.majorVersion() << "." << header.minorVersion() << std::endl;
+			// return 1;
 		}
 		archive.decompress(&fout);
 		fin.close();
