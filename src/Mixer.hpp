@@ -24,9 +24,10 @@
 #ifndef _MIXER_HPP_
 #define _MIXER_HPP_
 
-#include <emmintrin.h>
+// #include <emmintrin.h>
 #include "Util.hpp"
 #include "Compressor.hpp"
+#include "simde/x86/sse2.h"
 
 
 template <const uint32_t fp_shift = 14>
@@ -230,13 +231,13 @@ public:
 
 	// Calculate and return prediction.
 	forceinline uint32_t p(__m128i probs) const {
-		__m128i dp = _mm_madd_epi16(w, probs);
+		__m128i dp = simde_mm_madd_epi16(w, probs);
 		// p0*w0+p1*w1, ...
 
 		// SSE5: _mm_haddd_epi16?
 		// 2 madd, 2 shuffles = ~8 clocks?
-		dp = _mm_add_epi32(dp, _mm_shuffle_epi32(dp, shuffle<1, 0, 3, 2>::value));
-		dp = _mm_add_epi32(dp, _mm_shuffle_epi32(dp, shuffle<2, 3, 0, 1>::value));
+		dp = simde_mm_add_epi32(dp, simde_mm_shuffle_epi32(dp, (shuffle<1, 0, 3, 2>::value)));
+		dp = simde_mm_add_epi32(dp, simde_mm_shuffle_epi32(dp, (shuffle<2, 3, 0, 1>::value)));
 
 		return (_mm_cvtsi128_si32(dp) + (skew << wshift)) >> fp_shift;
 	}
@@ -252,7 +253,7 @@ public:
 			if (err < -32768) err = -32768;
 			// I think this works, we shall see.
 			auto serr = static_cast<uint32_t>(static_cast<uint16_t>(err));
-			__m128i verr = _mm_shuffle_epi32(_mm_cvtsi32_si128(serr | (serr << 16)), 0);
+			__m128i verr = simde_mm_shuffle_epi32(_mm_cvtsi32_si128(serr | (serr << 16)), 0);
 			// shift must be 16
 			w = _mm_adds_epi16(w, _mm_mulhi_epi16(probs, verr));
 			// Rounding, is this REALLY worth it???
