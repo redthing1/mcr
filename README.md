@@ -1,5 +1,10 @@
-mcm compressor: context mixing + lzp
-===================================
+# mcm compressor: context mixing + lzp
+
+## build
+
+```sh
+./make.sh
+```
 
 ###### Fast + effective CM algorithm
 <p>
