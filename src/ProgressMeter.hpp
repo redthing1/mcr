@@ -43,7 +43,7 @@ public:
 
 	~ProgressMeter() {
 #ifndef _WIN64
-		_mm_empty();
+		simde_mm_empty();
 #endif
 	}
 
