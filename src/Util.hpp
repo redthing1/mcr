@@ -87,7 +87,7 @@ static const uint32_t kBitsPerByte = 8;
 
 forceinline void prefetch(const void* ptr) {
 #ifdef WIN32
-	_mm_prefetch((char*)ptr, _MM_HINT_T0);
+	simde_mm_prefetch((char*)ptr, _MM_HINT_T0);
 #else
 	__builtin_prefetch(ptr);
 #endif
@@ -216,12 +216,12 @@ forceinline static void memcpy16(void* dest, const void* src, size_t len) {
 	const uint8_t* no_alias src_ptr = reinterpret_cast<const uint8_t* no_alias>(src);
 	const uint8_t* no_alias limit = dest_ptr + len;
 	*dest_ptr++ = *src_ptr++;
-	if (len >= sizeof(__m128)) {
-		const byte* no_alias limit2 = limit - sizeof(__m128);
+	if (len >= sizeof(simde__m128)) {
+		const byte* no_alias limit2 = limit - sizeof(simde__m128);
 		do {
 			copy16bytes(dest_ptr, src_ptr, limit);
-			src_ptr += sizeof(__m128);
-			dest_ptr += sizeof(__m128);
+			src_ptr += sizeof(simde__m128);
+			dest_ptr += sizeof(simde__m128);
 		} while (dest_ptr < limit2);
 	}
 	while (dest_ptr < limit) {

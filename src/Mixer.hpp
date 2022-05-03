@@ -183,7 +183,7 @@ class MMXMixer {
 public:
 	static const int round = 1 << (fp_shift - 1);
 	// Each mixer has its own set of weights.
-	__m128i w; // Add dummy skew weight at the end.
+	simde__m128i w; // Add dummy skew weight at the end.
 	int skew;
 	// Current learn rate.
 	int learn, pad1, pad2;
@@ -199,38 +199,38 @@ public:
 	short getWeight(uint32_t index) const {
 		assert(index < weights);
 		switch (index) {
-		case 0: return _mm_extract_epi16(w, 0);
-		case 1: return _mm_extract_epi16(w, 1);
-		case 2: return _mm_extract_epi16(w, 2);
-		case 3: return _mm_extract_epi16(w, 3);
-		case 4: return _mm_extract_epi16(w, 4);
-		case 5: return _mm_extract_epi16(w, 5);
-		case 6: return _mm_extract_epi16(w, 6);
-		case 7: return _mm_extract_epi16(w, 7);
+		case 0: return simde_mm_extract_epi16(w, 0);
+		case 1: return simde_mm_extract_epi16(w, 1);
+		case 2: return simde_mm_extract_epi16(w, 2);
+		case 3: return simde_mm_extract_epi16(w, 3);
+		case 4: return simde_mm_extract_epi16(w, 4);
+		case 5: return simde_mm_extract_epi16(w, 5);
+		case 6: return simde_mm_extract_epi16(w, 6);
+		case 7: return simde_mm_extract_epi16(w, 7);
 		}
 		return 0;
 	}
 
 	void init() {
-		w = _mm_cvtsi32_si128(0);
+		w = simde_mm_cvtsi32_si128(0);
 		if (weights) {
 			int iw = (1 << fp_shift) / weights;
-			if (weights > 0) w = _mm_insert_epi16(w, iw, 0);
-			if (weights > 1) w = _mm_insert_epi16(w, iw, 1);
-			if (weights > 2) w = _mm_insert_epi16(w, iw, 2);
-			if (weights > 3) w = _mm_insert_epi16(w, iw, 3);
-			if (weights > 4) w = _mm_insert_epi16(w, iw, 4);
-			if (weights > 5) w = _mm_insert_epi16(w, iw, 5);
-			if (weights > 6) w = _mm_insert_epi16(w, iw, 6);
-			if (weights > 7) w = _mm_insert_epi16(w, iw, 7);
+			if (weights > 0) w = simde_mm_insert_epi16(w, iw, 0);
+			if (weights > 1) w = simde_mm_insert_epi16(w, iw, 1);
+			if (weights > 2) w = simde_mm_insert_epi16(w, iw, 2);
+			if (weights > 3) w = simde_mm_insert_epi16(w, iw, 3);
+			if (weights > 4) w = simde_mm_insert_epi16(w, iw, 4);
+			if (weights > 5) w = simde_mm_insert_epi16(w, iw, 5);
+			if (weights > 6) w = simde_mm_insert_epi16(w, iw, 6);
+			if (weights > 7) w = simde_mm_insert_epi16(w, iw, 7);
 		}
 		skew = 0;
 		learn = 192;
 	}
 
 	// Calculate and return prediction.
-	forceinline uint32_t p(__m128i probs) const {
-		__m128i dp = simde_mm_madd_epi16(w, probs);
+	forceinline uint32_t p(simde__m128i probs) const {
+		simde__m128i dp = simde_mm_madd_epi16(w, probs);
 		// p0*w0+p1*w1, ...
 
 		// SSE5: _mm_haddd_epi16?
@@ -238,25 +238,25 @@ public:
 		dp = simde_mm_add_epi32(dp, simde_mm_shuffle_epi32(dp, (shuffle<1, 0, 3, 2>::value)));
 		dp = simde_mm_add_epi32(dp, simde_mm_shuffle_epi32(dp, (shuffle<2, 3, 0, 1>::value)));
 
-		return (_mm_cvtsi128_si32(dp) + (skew << wshift)) >> fp_shift;
+		return (simde_mm_cvtsi128_si32(dp) + (skew << wshift)) >> fp_shift;
 	}
 
 	// Neural network learn, assumes probs are stretched.
-	forceinline bool update(__m128i probs, int pr, uint32_t bit, uint32_t pshift = 12, uint32_t limit = 13) {
+	forceinline bool update(simde__m128i probs, int pr, uint32_t bit, uint32_t pshift = 12, uint32_t limit = 13) {
 		int err = ((bit << pshift) - pr) * learn;
 		bool ret = false;
 		if (fastAbs(err) >= (round >> (pshift - 1))) {
 			err >>= 3;
-			probs = _mm_slli_epi32(probs, 3);
+			probs = simde_mm_slli_epi32(probs, 3);
 			if (err > 32767) err = 32767; // Make sure we don't overflow.
 			if (err < -32768) err = -32768;
 			// I think this works, we shall see.
 			auto serr = static_cast<uint32_t>(static_cast<uint16_t>(err));
-			__m128i verr = simde_mm_shuffle_epi32(_mm_cvtsi32_si128(serr | (serr << 16)), 0);
+			simde__m128i verr = simde_mm_shuffle_epi32(simde_mm_cvtsi32_si128(serr | (serr << 16)), 0);
 			// shift must be 16
-			w = _mm_adds_epi16(w, _mm_mulhi_epi16(probs, verr));
+			w = simde_mm_adds_epi16(w, simde_mm_mulhi_epi16(probs, verr));
 			// Rounding, is this REALLY worth it???
-			// w = _mm_adds_epi16(w, _mm_srli_epi16(_mm_mullo_epi16(probs, verr), 15));
+			// w = simde_mm_adds_epi16(w, _mm_srli_epi16(_mm_mullo_epi16(probs, verr), 15));
 			ret = true;
 		}
 		static const uint32_t sq_learn = 9;
