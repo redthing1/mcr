@@ -34,8 +34,6 @@
 #include "lz4.h"
 #endif
 
-#include <mmintrin.h>
-
 // Standard LZW.
 template <bool use_range = true>
 class LZW {

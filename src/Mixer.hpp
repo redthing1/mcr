@@ -24,7 +24,6 @@
 #ifndef _MIXER_HPP_
 #define _MIXER_HPP_
 
-// #include <emmintrin.h>
 #include "Util.hpp"
 #include "Compressor.hpp"
 #include "simde/x86/sse2.h"

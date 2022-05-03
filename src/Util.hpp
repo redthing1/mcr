@@ -26,15 +26,15 @@
 
 #include <cassert>
 #include <ctime>
-#include <emmintrin.h>
 #include <iostream>
-#include <mmintrin.h>
 #include <mutex>
 #include <ostream>
 #include <stdint.h>
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include "simde/x86/sse2.h"
 
 #ifdef WIN32
 #define forceinline __forceinline
@@ -208,7 +208,7 @@ private:
 };
 
 forceinline void copy16bytes(byte* no_alias out, const byte* no_alias in, const byte* limit) {
-	_mm_storeu_ps(reinterpret_cast<float*>(out), _mm_loadu_ps(reinterpret_cast<const float*>(in)));
+	simde_mm_storeu_ps(reinterpret_cast<float*>(out), simde_mm_loadu_ps(reinterpret_cast<const float*>(in)));
 }
 
 forceinline static void memcpy16(void* dest, const void* src, size_t len) {
