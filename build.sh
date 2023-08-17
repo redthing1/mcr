@@ -1,1 +1,1 @@
-./make_native.sh
+./make_native_static.sh
