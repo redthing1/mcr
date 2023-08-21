@@ -33,7 +33,11 @@
 #include <list>
 #include <ctime>
 #include <iomanip>
+#if defined(__MACH__)
+#include <stdlib.h>
+#else 
 #include <malloc.h>
+#endif
 
 #include "Stream.hpp"
 #include "Util.hpp"
